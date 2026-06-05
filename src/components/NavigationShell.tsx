@@ -17,7 +17,6 @@ const STANDALONE_ROUTES = [
   '/login',
   '/register',
   '/oidc-register',
-  '/warning',
   '/source-test',
   '/watch-room/screen',
 ];
