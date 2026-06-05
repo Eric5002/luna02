@@ -742,30 +742,33 @@ function PlayPageClient() {
     fetchAdFilterCode();
   }, []);
 
-  // WebGPU支持检测
+    // WebGPU支持检测
   useEffect(() => {
     const checkWebGPUSupport = async () => {
-      if (typeof window === 'undefined' || !('gpu' in navigator)) {
-  setWebGPUSupported(false);
-  return;
-}
+      try {
+        // SSR guard
+        if (typeof window === 'undefined' || !('gpu' in navigator)) {
+          setWebGPUSupported(false);
+          return;
+        }
 
-let adapter: GPUAdapter | null;
+        let adapter: GPUAdapter | null = null;
 
-try {
-  adapter = await (navigator as any).gpu.requestAdapter();
-} catch {
-  adapter = null;
-}
+        try {
+          adapter = await (navigator as any).gpu.requestAdapter();
+        } catch (err) {
+          adapter = null;
+        }
 
-if (!adapter) {
-  setWebGPUSupported(false);
-  return;
-}
+        if (!adapter) {
+          setWebGPUSupported(false);
+          console.log('WebGPU不支持：无法获取GPU适配器');
+          return;
         }
 
         setWebGPUSupported(true);
         console.log('WebGPU支持检测：✅ 支持');
+
       } catch (err) {
         setWebGPUSupported(false);
         console.log('WebGPU不支持：检测失败', err);
@@ -774,7 +777,7 @@ if (!adapter) {
 
     checkWebGPUSupport();
   }, []);
-
+  
   // WebSR 启用/禁用生命周期
   useEffect(() => {
     if (!websrEnabled || !webGPUSupported || !artPlayerRef.current?.video) {
