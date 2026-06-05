@@ -366,7 +366,10 @@ export async function getStorageEstimate(): Promise<{
   quotaMB: number;
 }> {
   if ('storage' in navigator && 'estimate' in navigator.storage) {
-    const estimate = await navigator.storage.estimate();
+  const estimate =
+  typeof window !== 'undefined' && typeof navigator !== 'undefined' && navigator.storage?.estimate
+    ? await navigator.storage.estimate()
+    : null;
     const usage = estimate.usage || 0;
     const quota = estimate.quota || 0;
     const percentage = quota > 0 ? (usage / quota) * 100 : 0;
