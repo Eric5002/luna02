@@ -283,7 +283,7 @@ const missingCriticalEnv =
   !process.env.UPSTASH_URL || !process.env.UPSTASH_TOKEN;
 
 if (missingCriticalEnv) {
-  return NextResponse.redirect(new URL('/warning', request.url));
+  return NextResponse.next();
 }
 
 // optional: password check (ONLY if you truly need it)
