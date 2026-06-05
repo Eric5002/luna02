@@ -75,7 +75,8 @@ function isLikelyDomesticEnvironment(): boolean {
     }
 
     // 检查语言设置
-    const lang = typeof navigator !== 'undefined' ? navigator.language : 'en';
+    const isBrowser = typeof window !== 'undefined';
+    const lang = isBrowser ? navigator.language : 'en';
     if (lang.startsWith('zh-CN')) {
       return true;
     }
