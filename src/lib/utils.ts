@@ -16,7 +16,10 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 // 增强的设备检测逻辑，参考最新的设备特征
-const userAgent = typeof navigator !== 'undefined' ? navigator.userAgent : '';
+const isBrowser = typeof window !== 'undefined';
+const userAgent = isBrowser ? navigator.userAgent : '';
+const cores = isBrowser ? navigator.hardwareConcurrency : 4;
+const maxTouchPoints = isBrowser ? navigator.maxTouchPoints : 0;
 
 // iOS 设备检测 (包括 iPad 的新版本检测)
 const isIOS = /iPad|iPhone|iPod/i.test(userAgent) && !(window as any).MSStream;
