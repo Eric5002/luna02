@@ -752,7 +752,7 @@ function PlayPageClient() {
       }
 
       try {
-        const adapter = await (navigator as any).gpu.requestAdapter();
+        if (typeof window === 'undefined' || !('gpu' in navigator)) return;
         if (!adapter) {
           setWebGPUSupported(false);
           console.log('WebGPU不支持：无法获取GPU适配器');
