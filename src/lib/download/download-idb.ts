@@ -52,7 +52,9 @@ let supportsStorageBuckets = false;
  * 初始化 Storage Buckets（如果支持）
  */
 async function initStorageBuckets(): Promise<void> {
-  if ('storageBuckets' in navigator) {
+  const isBrowser = typeof window !== 'undefined';
+
+if (isBrowser && 'storageBuckets' in navigator) {
     try {
       segmentsBucket = await navigator.storageBuckets!.open(SEGMENTS_BUCKET);
       supportsStorageBuckets = true;
