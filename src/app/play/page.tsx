@@ -745,18 +745,23 @@ function PlayPageClient() {
   // WebGPU支持检测
   useEffect(() => {
     const checkWebGPUSupport = async () => {
-      if (typeof navigator === 'undefined' || !('gpu' in navigator)) {
-        setWebGPUSupported(false);
-        console.log('WebGPU不支持：浏览器不支持WebGPU API');
-        return;
-      }
+      if (typeof window === 'undefined' || !('gpu' in navigator)) {
+  setWebGPUSupported(false);
+  return;
+}
 
-      try {
-        if (typeof window === 'undefined' || !('gpu' in navigator)) return;
-        if (!adapter) {
-          setWebGPUSupported(false);
-          console.log('WebGPU不支持：无法获取GPU适配器');
-          return;
+let adapter: GPUAdapter | null;
+
+try {
+  adapter = await (navigator as any).gpu.requestAdapter();
+} catch {
+  adapter = null;
+}
+
+if (!adapter) {
+  setWebGPUSupported(false);
+  return;
+}
         }
 
         setWebGPUSupported(true);
