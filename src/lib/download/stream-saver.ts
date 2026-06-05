@@ -23,7 +23,9 @@ let useBlobFallback = /constructor/i.test(window.HTMLElement.toString()) || !!wi
 
 try {
   new Response(new ReadableStream())
-  if (isSecureContext && !('serviceWorker' in navigator)) {
+  const isBrowser = typeof window !== 'undefined';
+
+if (isBrowser && isSecureContext && !('serviceWorker' in navigator)) {
     useBlobFallback = true
   }
 } catch (err) {
