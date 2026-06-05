@@ -1489,3 +1489,9 @@ function getUpstashRedisClient(): Redis {
 
   return client;
 }
+
+console.log("ENV CHECK", {
+  url: process.env.UPSTASH_URL,
+  token: !!process.env.UPSTASH_TOKEN,
+  storage: process.env.NEXT_PUBLIC_STORAGE_TYPE,
+});
