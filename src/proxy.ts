@@ -276,17 +276,22 @@ async function handleAuthentication(
     }
   }
 
-  const storageType = process.env.NEXT_PUBLIC_STORAGE_TYPE || 'localstorage';
+const storageType = process.env.NEXT_PUBLIC_STORAGE_TYPE || 'localstorage';
 
-  if (!process.env.PASSWORD) {
-    // 如果没有设置密码，重定向到警告页面
-    const warningUrl = new URL('/warning', request.url);
-    if (!process.env.UPSTASH_URL || !process.env.UPSTASH_TOKEN) {
+// Only block if BOTH critical envs are missing
+const missingCriticalEnv =
+  !process.env.UPSTASH_URL || !process.env.UPSTASH_TOKEN;
+
+if (missingCriticalEnv) {
   return NextResponse.redirect(new URL('/warning', request.url));
 }
 
+// optional: password check (ONLY if you truly need it)
+if (!process.env.PASSWORD) {
+  console.warn('PASSWORD not set, continuing without admin protection');
+}
+
 return NextResponse.next();
-  }
 
   // 从cookie获取认证信息
   const authInfo = getAuthInfoFromCookie(request);
