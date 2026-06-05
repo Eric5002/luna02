@@ -281,7 +281,11 @@ async function handleAuthentication(
   if (!process.env.PASSWORD) {
     // 如果没有设置密码，重定向到警告页面
     const warningUrl = new URL('/warning', request.url);
-    return NextResponse.redirect(warningUrl);
+    if (!process.env.UPSTASH_URL || !process.env.UPSTASH_TOKEN) {
+  return NextResponse.redirect(new URL('/warning', request.url));
+}
+
+return NextResponse.next();
   }
 
   // 从cookie获取认证信息
